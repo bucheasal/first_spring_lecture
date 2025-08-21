@@ -3,13 +3,14 @@ package hello.hello_spring.service;
 import hello.hello_spring.domain.Member;
 import hello.hello_spring.repository.MemberRepository;
 import hello.hello_spring.repository.MemoryMemberRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-
+@Transactional
 public class MemberService {
     private final MemberRepository memberRepository;
 
@@ -29,11 +30,13 @@ public class MemberService {
         });
         바로 꺼내는건 권장하지 않는다.
          */
-        vaildateDuplicateMemeber(member); //중복 회원 검증
+
+            vaildateDuplicateMemeber(member); //중복 회원 검증
+            memberRepository.save(member);
+            return member.getId();
 
 
-        memberRepository.save(member);
-        return member.getId();
+
     }
 
     private void vaildateDuplicateMemeber(Member member) {
